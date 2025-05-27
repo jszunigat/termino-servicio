@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirección segura</title>
+</head>
+<body>
+  <p>Validando acceso al formulario...</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const timestamp = params.get('t');
+    const idacc = params.get('idacc');  // Valor dinámico que queremos mantener
+
+    if (!timestamp || !idacc) {
+      document.body.innerHTML = "<h2>Enlace no válido o incompleto.</h2>";
+    } else {
+      const now = Date.now();
+      const linkTime = parseInt(timestamp, 10);
+      const difference = now - linkTime;
+      const twoHours = 2 * 60 * 60 * 1000;
+
+      if (difference <= twoHours) {
+        // Redirigir al formulario, pasando el idacc como parámetro
+        const targetURL = `https://forms.zohopublic.com/portalenergy/form/TerminodeServicio1/formperma/2Ht3vobU9RcbzX-nXoj8ndkji_RCio7mAlPpFEl7iRs?idacc=${encodeURIComponent(idacc)}`;
+        window.location.href = targetURL;
+      } else {
+        document.body.innerHTML = "<h2>El enlace ha expirado. Solicita uno nuevo.</h2>";
+      }
+    }
+  </script>
+</body>
+</html>
